@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "623475831377",
+    "project_id": "my-first-quiz-app-8fab6",
+    "storage_bucket": "my-first-quiz-app-8fab6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623475831377:android:253710d0d2a4835e117e70",
+        "android_client_info": {
+          "package_name": "com.example.my_first_quiz_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623475831377-glb9brq0tb50l0jnuvo5e5eba4tpu12p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEYgm3rPj8DNpLbZxEJ8RjhCkF8-esHlc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623475831377-glb9brq0tb50l0jnuvo5e5eba4tpu12p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
