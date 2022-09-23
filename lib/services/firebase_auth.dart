@@ -1,8 +1,11 @@
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_quiz_app/model/question.dart';
+import 'package:my_first_quiz_app/services/storage_methods.dart';
 import 'package:my_first_quiz_app/users/views/home_page/admin_home_page.dart';
-
 import '../users/views/home_page/user_home_page.dart';
 
 class AuthMethods {
@@ -78,22 +81,33 @@ class AuthMethods {
   Future<String> uploadDetails({
     required String category,
     required String question,
-    required List<String> answer,
+    required List<String> options,
+    required String answer,
     required String interestingFact,
+    required Uint8List? file,
   }) async {
     String response = "Some error occurred";
     bool isAdmin = false;
     try{
 
-      if(category.isNotEmpty || question.isNotEmpty || answer.isNotEmpty || interestingFact.isNotEmpty) {
-
+      if(category.isNotEmpty || question.isNotEmpty || answer.isNotEmpty || interestingFact.isNotEmpty || file != null) {
         /// Save the other details to the firebase database using firebaseFirestore
-        await _fireStore.collection("categories").doc(category).update({
-          "question" : FieldValue.arrayUnion(elements),
-          "category" : category,
-          "answer" : answer,
-          "interestingFact" : interestingFact,
-        });
+        StorageMethods _storage = StorageMethods();
+        String image = await _storage.uploadImageToStorage("Question", file!);
+
+        var id = DateTime.now().millisecondsSinceEpoch.toString();
+        QuestionModel questions = QuestionModel(
+          interestingFact: interestingFact,
+          id: id,
+          image: image,
+          question: question,
+          answer: answer,
+          category: category,
+          option: options,
+        );
+
+        await _fireStore.collection("Questions").doc(id).set(questions.toJson());
+
         response = "Success";
       }
     }

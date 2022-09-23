@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,14 +63,18 @@ class UserDetailsViewModel extends ChangeNotifier {
   Future<void> uploadDetails({
     required String category,
     required String question,
-    required List<String> answer,
+    required List<String> options,
+    required String answer,
     required String interestingFact,
+    required Uint8List? file,
     required BuildContext context,
   }) async {
     saving(true);
     String response = await AuthMethods().uploadDetails(
+      options: options,
       category: category, question: question,
       answer: answer, interestingFact: interestingFact,
+      file: file,
     );
     saving(false);
     debugPrint(response);

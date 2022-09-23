@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_first_quiz_app/constants/constants.dart';
 import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
 
@@ -26,5 +29,14 @@ class Utils {
         // margin: const EdgeInsets.fromLTRB(20, 0, 20, 600),
       ),
     );
+  }
+  static dynamic pickImage(ImageSource source) async {
+    ImagePicker imagePicker = ImagePicker();
+
+    XFile? image = await imagePicker.pickImage(source: source);
+    if(image != null){
+      return await image.readAsBytes();
+    }
+    print("No image was selected");
   }
 }

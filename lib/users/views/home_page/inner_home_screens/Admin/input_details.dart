@@ -1,11 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:my_first_quiz_app/constants/constants.dart';
 import 'package:my_first_quiz_app/global_widgets/text_field.dart';
 import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
 import 'package:my_first_quiz_app/users/view_model/user_details_view_model.dart';
 import 'package:my_first_quiz_app/users/views/home_page/admin_home_page.dart';
+import 'package:my_first_quiz_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class InputDetails extends StatefulWidget {
@@ -22,6 +26,7 @@ class _InputDetailsState extends State<InputDetails> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _questionsController = TextEditingController();
   final TextEditingController _answerController = TextEditingController();
+  final TextEditingController _optionsController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -32,6 +37,15 @@ class _InputDetailsState extends State<InputDetails> {
     _categoryController.dispose();
     _interestingFactController.dispose();
     _questionsController.dispose();
+    _optionsController.dispose();
+  }
+  Uint8List? _image;
+
+  void selectImage() async  {
+    Uint8List im = await Utils.pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -78,7 +92,7 @@ class _InputDetailsState extends State<InputDetails> {
                 // const SizedBox(height: 30,),
                 Positioned(
                   bottom: 0,
-                  top: 200,
+                  top: 150,
                   child: Container(
                     padding: const EdgeInsets.only(top: 50),
                     width: MediaQuery.of(context).size.width,
@@ -94,6 +108,31 @@ class _InputDetailsState extends State<InputDetails> {
                         padding: const EdgeInsets.only(left: 20, right: 20,),
                         child: Column(
                           children: [
+                            _image != null ? InkWell(
+                              onTap: () => selectImage(),
+                              child: Container(
+                                height: 90,
+                                width: 190,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: Image(
+                                  image: MemoryImage(_image!),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ) :
+                            InkWell(
+                              onTap: () => selectImage(),
+                              child: Container(
+                                  padding: const EdgeInsets.all(30),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                  ),
+                                  child: const Icon(Icons.upload),
+                              ),
+                            ),
+                            const SizedBox(height: 10,),
                             Form(
                               key: _formKey,
                               child: Column(
@@ -123,7 +162,15 @@ class _InputDetailsState extends State<InputDetails> {
                                   //   suffixIcon: const Icon(Icons.person, color: Colors.black,),
                                   // ),
                                   Field(
-                                    label: "Answers", hintText: "Answers",
+                                    label: "Options", hintText: "Options",
+                                    controller: _optionsController,
+                                    validator: RequiredValidator(errorText: "The Options are required"),
+                                    keyboardType: TextInputType.text,
+                                    keyboardCaps: TextCapitalization.sentences,
+                                    suffixIcon: const Icon(Icons.person, color: Colors.black,),
+                                  ),
+                                  Field(
+                                    label: "Answer", hintText: "Answer",
                                     controller: _answerController,
                                     validator: RequiredValidator(errorText: "The Answer is required"),
                                     keyboardType: TextInputType.text,
@@ -156,14 +203,21 @@ class _InputDetailsState extends State<InputDetails> {
                                   if(_formKey.currentState!.validate()){
                                     // debugPrint("it works");
                                     _formKey.currentState!.save();
-                                    String answer = _answerController.text;
-                                    List<String> a = answer.split(" ");
+                                    String answer = _optionsController.text;
+                                    List<String> a = answer.split("  ");
                                     print(a);
                                     userDetails.uploadDetails(
-                                      question: _questionsController.text, answer: a,
+                                      question: _questionsController.text, options: a,
                                       interestingFact: _interestingFactController.text, category: _categoryController.text,
-                                      context: context,
+                                      context: context, answer: _answerController.text,
+                                      file: _image,
                                     );
+                                    _answerController.clear();
+                                    // _categoryController.clear();
+                                    _interestingFactController.clear();
+                                    _questionsController.clear();
+                                    _optionsController.clear();
+                                    _image = null;
                                   }
                                 },
                                 color: MyColor.blue,
