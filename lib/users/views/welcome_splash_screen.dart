@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_quiz_app/global_widgets/status_bar_color_changer.dart';
 import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
 
 import 'home_page/admin_home_page.dart';
@@ -49,9 +50,12 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: EText(text: "Welcome "),
+    return const StatusBarColorChanger(
+      isDark: false,
+      child: Scaffold(
+        body: Center(
+          child: EText(text: "Welcome "),
+        ),
       ),
     );
   }

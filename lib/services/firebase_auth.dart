@@ -2,17 +2,14 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:my_first_quiz_app/model/question.dart';
+import 'package:my_first_quiz_app/model/question_model.dart';
+import 'package:my_first_quiz_app/model/sign_up_model.dart';
 import 'package:my_first_quiz_app/services/storage_methods.dart';
-import 'package:my_first_quiz_app/users/views/home_page/admin_home_page.dart';
-import '../users/views/home_page/user_home_page.dart';
+import '../model/category_model.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-
-  Stream<User?> get authStateChanges => _auth.idTokenChanges();
 
   Future<String> signUpUser({
     required String email,
@@ -28,16 +25,22 @@ class AuthMethods {
         /// register user at the firebase authentication page
         UserCredential credential =
         await _auth.createUserWithEmailAndPassword(email: email, password: password);
+
+        SignUpModel signUp = SignUpModel(
+          username: username,
+          email: email,
+          password: password,
+          confirmPassword: confirmPassword,
+          uid: credential.user!.uid,
+          isAdmin: isAdmin,
+          points: 20,
+          lives: 3,
+          answeredCorrectly: 0,
+          totalDone: 0,
+        );
         
         /// Save the other details to the firebase database using firebaseFirestore
-        await _fireStore.collection("users").doc(credential.user!.uid).set({
-          "username" : username,
-          "email" : email,
-          "password" : password,
-          "confirmPassword" : confirmPassword,
-          "uid" : credential.user!.uid,
-          "isAdmin" : isAdmin,
-        });
+        await _fireStore.collection("users").doc(credential.user!.uid).set(signUp.toJson());
         response = "Success";
       }
     }
@@ -78,7 +81,7 @@ class AuthMethods {
     return response;
   }
 
-  Future<String> uploadDetails({
+  Future<String> uploadQuestions({
     required String category,
     required String question,
     required List<String> options,
@@ -107,6 +110,37 @@ class AuthMethods {
         );
 
         await _fireStore.collection("Questions").doc(id).set(questions.toJson());
+
+        response = "Success";
+      }
+    }
+
+    catch(e) {
+      response = e.toString();
+    }
+    return response;
+  }
+
+  Future<String> uploadCategory({
+    required String category,
+    required Uint8List? file,
+  }) async {
+    String response = "Some error occurred";
+    try{
+
+      if(category.isNotEmpty ||  file != null) {
+        /// Save the other details to the firebase database using firebaseFirestore
+        StorageMethods _storage = StorageMethods();
+        String image = await _storage.uploadImageToStorage("Categories", file!);
+
+        var id = DateTime.now().millisecondsSinceEpoch.toString();
+        CategoryModel headline = CategoryModel(
+          id: id,
+          image: image,
+          category: category,
+        );
+
+        await _fireStore.collection("Categories").doc(id).set(headline.toJson());
 
         response = "Success";
       }

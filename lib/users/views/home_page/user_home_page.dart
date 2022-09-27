@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_quiz_app/global_widgets/status_bar_color_changer.dart';
 import 'package:my_first_quiz_app/users/view_model/home_view_model.dart';
 import 'package:provider/provider.dart';
 import 'components/button_with_facts.dart';
@@ -25,22 +26,25 @@ Widget landingPage(BuildContext context, HomeViewModel getHomeState) {
   );
 }
 
-Scaffold buildHomePage(HomeViewModel getHomeState, BuildContext context) {
-  return Scaffold(
-    body: SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          HomeAppBar(),
-          SizedBox(height: 25,),
-          SideIcon(),
-          WorldImage(),
-          PlayButton(),
-          TextFacts(),
-          SizedBox(height: 10,),
-          CompletedButton(),
-        ],
+Widget buildHomePage(HomeViewModel getHomeState, BuildContext context) {
+  return StatusBarColorChanger(
+    isDark: false,
+    child: Scaffold(
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            HomeAppBar(),
+            SizedBox(height: 25,),
+            SideIcon(),
+            WorldImage(),
+            PlayButton(),
+            TextFacts(),
+            SizedBox(height: 10,),
+            CompletedButton(),
+          ],
+        ),
       ),
     ),
   );

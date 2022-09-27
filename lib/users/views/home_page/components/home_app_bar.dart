@@ -3,7 +3,7 @@ import 'package:my_first_quiz_app/constants/constants.dart';
 import 'package:my_first_quiz_app/constants/global.dart';
 import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
 import 'package:my_first_quiz_app/users/view_model/home_view_model.dart';
-import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/Admin/input_details.dart';
+import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/Admin/input_details/input_details.dart';
 import 'package:provider/provider.dart';
 
 class HomeAppBar extends StatelessWidget {

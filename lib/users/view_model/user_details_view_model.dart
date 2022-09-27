@@ -60,7 +60,7 @@ class UserDetailsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> uploadDetails({
+  Future<void> uploadQuestions({
     required String category,
     required String question,
     required List<String> options,
@@ -70,10 +70,29 @@ class UserDetailsViewModel extends ChangeNotifier {
     required BuildContext context,
   }) async {
     saving(true);
-    String response = await AuthMethods().uploadDetails(
+    String response = await AuthMethods().uploadQuestions(
       options: options,
       category: category, question: question,
       answer: answer, interestingFact: interestingFact,
+      file: file,
+    );
+    saving(false);
+    debugPrint(response);
+    if(response != "Success") {
+      Utils.showSnackBar(content: response, context: context);
+    } else {
+      Utils.showSnackBar(content: "Success", context: context);
+    }
+  }
+
+  Future<void> uploadCategories({
+    required String category,
+    required Uint8List? file,
+    required BuildContext context,
+  }) async {
+    saving(true);
+    String response = await AuthMethods().uploadCategory(
+      category: category,
       file: file,
     );
     saving(false);

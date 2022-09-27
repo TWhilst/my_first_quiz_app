@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_quiz_app/global_widgets/circles_with_lives.dart';
 import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
+import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/categories_screen/inner_screen/quiz_screen.dart';
+import 'package:provider/provider.dart';
 import 'constants.dart';
 
 class Global {
@@ -174,7 +177,19 @@ class Global {
       ),
     );
   }
+
+  int index(BuildContext context) {
+    final user = context.watch<QuerySnapshot>();
+    int value = 0;
+    if(value < user.docs.length) {
+      value++;
+    }
+    return value;
+  }
+
 }
+
+
 
 
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -5,12 +6,16 @@ import 'package:flutter/services.dart';
 import 'package:my_first_quiz_app/constants/constants.dart';
 import 'package:my_first_quiz_app/services/firebase_auth.dart';
 import 'package:my_first_quiz_app/users/view_model/home_view_model.dart';
+import 'package:my_first_quiz_app/users/view_model/question_provider.dart';
 import 'package:my_first_quiz_app/users/view_model/user_details_view_model.dart';
 import 'package:my_first_quiz_app/users/views/home_page/admin_home_page.dart';
-import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/Admin/input_details.dart';
+import 'package:my_first_quiz_app/users/views/home_page/components/home_utils.dart';
+import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/Admin/input_details/input_details.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/about_the_game_screen.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/categories_screen/categories_screen.dart';
+import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/categories_screen/inner_screen/completed_quiz.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/categories_screen/inner_screen/quiz_screen.dart';
+import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/categories_screen/inner_screen/quiz_screen_2.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/history_of_questions_screen.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/interesting_facts_screen.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/premium_screen.dart';
@@ -46,8 +51,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => UserDetailsViewModel()),
+        ChangeNotifierProvider(create: (_) => QuestionProvider()),
         Provider<AuthMethods>(create: (_) => AuthMethods()),
-        StreamProvider(create: (context) => context.read<AuthMethods>().authStateChanges, initialData: null,)
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -71,6 +76,8 @@ class MyApp extends StatelessWidget {
           CategoriesScreen.routeName: (context) => const CategoriesScreen(),
           QuizScreen.routeName: (context) => const QuizScreen(),
           InputDetails.routeName: (context) => const InputDetails(),
+          QuizScreen2.routeName: (context) => const QuizScreen2(),
+          CompletedQuiz.routeName: (context) => const CompletedQuiz(),
         },
       ),
     );

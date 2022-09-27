@@ -1,12 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class QuestionModel{
   final String question,answer,category,id, interestingFact;
-  final List<String> option;
+  final List option;
   final String image;
 
   QuestionModel({
     required this.interestingFact,
     required this.id,
-    required   this.question,
+    required this.question,
     required this.answer,
     required this.image,
     required this.category,
@@ -27,7 +29,7 @@ class QuestionModel{
     };
   }
 
-  factory QuestionModel.fromJson(Map data){
+  factory QuestionModel.fromJson(DocumentSnapshot data){
     return QuestionModel(
       id: data['id'],
       question: data['question'],

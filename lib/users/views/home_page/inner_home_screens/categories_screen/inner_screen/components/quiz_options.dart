@@ -7,8 +7,10 @@ class QuizOptions extends StatelessWidget {
   final String text;
   final String? minus;
   final double? stackLeft;
+  final Function()? onPressed;
+  final double? elevation;
   const QuizOptions({
-    Key? key, this.width, required this.text, this.minus, this.stackLeft,
+    Key? key, this.width, required this.text, this.minus, this.stackLeft, this.onPressed, this.elevation,
   }) : super(key: key);
 
   @override
@@ -18,13 +20,13 @@ class QuizOptions extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 5, left: 0, bottom: 7),
           child: MaterialButton(
-            onPressed: () {},
+            onPressed: onPressed ?? () {},
             color:MyColor.lightBlue,
             // splashColor: const Color(0xFF0080a3),
             highlightColor: const Color(0xFF79bbc7),
             minWidth: width ?? 160,
             height: 45,
-            elevation: 5,
+            elevation: elevation ?? 5,
             shape: RoundedRectangleBorder(
               side: const BorderSide(width: 5, color: Colors.white,),
               borderRadius: BorderRadius.circular(15),
