@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_quiz_app/users/views/home_page/components/home_utils.dart';
-import 'package:my_first_quiz_app/users/views/home_page/admin_home_page.dart';
+import 'package:my_first_quiz_app/users/views/home_page/user_home_page.dart';
 import 'package:provider/provider.dart';
-
 import '../../../view_model/home_view_model.dart';
 
 class MenuBarItems extends StatelessWidget {

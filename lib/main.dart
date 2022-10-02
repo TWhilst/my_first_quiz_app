@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => UserDetailsViewModel()),
         ChangeNotifierProvider(create: (_) => QuestionProvider()),
-        Provider<AuthMethods>(create: (_) => AuthMethods()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

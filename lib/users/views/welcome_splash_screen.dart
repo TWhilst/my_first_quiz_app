@@ -7,7 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_quiz_app/global_widgets/status_bar_color_changer.dart';
 import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
+import 'package:provider/provider.dart';
 
+import '../view_model/user_details_view_model.dart';
 import 'home_page/admin_home_page.dart';
 import 'home_page/user_home_page.dart';
 
@@ -28,12 +30,17 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> {
 
   void checkRole() async{
     bool isAdmin = false;
+    final details = Provider.of<UserDetailsViewModel>(context, listen: false);
     User user = FirebaseAuth.instance.currentUser!;
     DocumentSnapshot snap =
-    await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
-    setState(() {
-      isAdmin = snap["isAdmin"];
-    });
+    await FirebaseFirestore.instance.collection("Users").doc(user.uid).get();
+    int lives = snap["lives"];
+    if(lives == 3){
+      details.full = true;
+    } else if(lives >= 1){
+      details.full = false;
+    }
+    isAdmin = snap["isAdmin"];
     if(isAdmin == false) {
       navigateTo(UserHomePage.routeName);
     } else {

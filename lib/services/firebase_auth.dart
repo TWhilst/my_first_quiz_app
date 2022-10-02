@@ -10,6 +10,12 @@ import '../model/category_model.dart';
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  
+  Future<SignUpModel> getSignUpDetails() async{
+    DocumentSnapshot snap = await _fireStore.collection("Users").doc(_auth.currentUser!.uid).get();
+    SignUpModel signUp = SignUpModel.fromJson(snap);
+    return signUp;
+  }
 
   Future<String> signUpUser({
     required String email,
@@ -34,13 +40,14 @@ class AuthMethods {
           uid: credential.user!.uid,
           isAdmin: isAdmin,
           points: 20,
+          totalPoints: 99,
           lives: 3,
           answeredCorrectly: 0,
           totalDone: 0,
         );
         
         /// Save the other details to the firebase database using firebaseFirestore
-        await _fireStore.collection("users").doc(credential.user!.uid).set(signUp.toJson());
+        await _fireStore.collection("Users").doc(credential.user!.uid).set(signUp.toJson());
         response = "Success";
       }
     }
@@ -80,78 +87,5 @@ class AuthMethods {
     }
     return response;
   }
-
-  Future<String> uploadQuestions({
-    required String category,
-    required String question,
-    required List<String> options,
-    required String answer,
-    required String interestingFact,
-    required Uint8List? file,
-  }) async {
-    String response = "Some error occurred";
-    bool isAdmin = false;
-    try{
-
-      if(category.isNotEmpty || question.isNotEmpty || answer.isNotEmpty || interestingFact.isNotEmpty || file != null) {
-        /// Save the other details to the firebase database using firebaseFirestore
-        StorageMethods _storage = StorageMethods();
-        String image = await _storage.uploadImageToStorage("Question", file!);
-
-        var id = DateTime.now().millisecondsSinceEpoch.toString();
-        QuestionModel questions = QuestionModel(
-          interestingFact: interestingFact,
-          id: id,
-          image: image,
-          question: question,
-          answer: answer,
-          category: category,
-          option: options,
-        );
-
-        await _fireStore.collection("Questions").doc(id).set(questions.toJson());
-
-        response = "Success";
-      }
-    }
-
-    catch(e) {
-      response = e.toString();
-    }
-    return response;
-  }
-
-  Future<String> uploadCategory({
-    required String category,
-    required Uint8List? file,
-  }) async {
-    String response = "Some error occurred";
-    try{
-
-      if(category.isNotEmpty ||  file != null) {
-        /// Save the other details to the firebase database using firebaseFirestore
-        StorageMethods _storage = StorageMethods();
-        String image = await _storage.uploadImageToStorage("Categories", file!);
-
-        var id = DateTime.now().millisecondsSinceEpoch.toString();
-        CategoryModel headline = CategoryModel(
-          id: id,
-          image: image,
-          category: category,
-        );
-
-        await _fireStore.collection("Categories").doc(id).set(headline.toJson());
-
-        response = "Success";
-      }
-    }
-
-    catch(e) {
-      response = e.toString();
-    }
-    return response;
-  }
-
-
 
 }

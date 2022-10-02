@@ -1,21 +1,33 @@
 import 'dart:typed_data';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_quiz_app/model/category_model.dart';
+import 'package:my_first_quiz_app/model/sign_up_model.dart';
 import 'package:my_first_quiz_app/services/firebase_auth.dart';
+import 'package:my_first_quiz_app/services/firestore_methods.dart';
 import 'package:my_first_quiz_app/utils/utils.dart';
 
 class UserDetailsViewModel extends ChangeNotifier {
-
+  bool _fullLives = true;
   bool _isSaving = false;
-  bool _isAdmin = false;
+  final _auth = AuthMethods();
+
+  final bool _isAdmin = false;
+  SignUpModel _signUp = SignUpModel();
+  bool get fullLives => _fullLives;
+
 
   bool get isSaving => _isSaving;
   bool get isAdmin => _isAdmin;
+  SignUpModel? get signUp => _signUp;
 
   void saving(bool isSaving) {
     _isSaving = isSaving;
+    notifyListeners();
+  }
+
+  set full(bool fullLives) {
+    _fullLives = fullLives;
     notifyListeners();
   }
 
@@ -70,7 +82,7 @@ class UserDetailsViewModel extends ChangeNotifier {
     required BuildContext context,
   }) async {
     saving(true);
-    String response = await AuthMethods().uploadQuestions(
+    String response = await FireStoreMethods().uploadQuestions(
       options: options,
       category: category, question: question,
       answer: answer, interestingFact: interestingFact,
@@ -91,7 +103,7 @@ class UserDetailsViewModel extends ChangeNotifier {
     required BuildContext context,
   }) async {
     saving(true);
-    String response = await AuthMethods().uploadCategory(
+    String response = await FireStoreMethods().uploadCategory(
       category: category,
       file: file,
     );
@@ -102,5 +114,10 @@ class UserDetailsViewModel extends ChangeNotifier {
     } else {
       Utils.showSnackBar(content: "Success", context: context);
     }
+  }
+
+  Future getSignUpDetails(SignUpModel signUp) async {
+    _signUp = signUp;
+    notifyListeners();
   }
 }

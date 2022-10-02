@@ -8,6 +8,7 @@ class SignUpModel{
   String? uid;
   bool? isAdmin;
   int? points;
+  int? totalPoints;
   int? lives;
   int? answeredCorrectly;
   int? totalDone;
@@ -21,6 +22,7 @@ class SignUpModel{
     this.lives,
     this.password,
     this.points,
+    this.totalPoints,
     this.totalDone,
     this.username,
   });
@@ -34,13 +36,15 @@ class SignUpModel{
       "uid" : uid,
       "isAdmin" : isAdmin,
       "points" : points,
+      "totalPoints" : totalPoints,
       "lives" : lives,
       "answeredCorrectly" : answeredCorrectly,
       "totalDone" : totalDone,
     };
   }
 
-  factory SignUpModel.fromJson(DocumentSnapshot snap) {
+  factory SignUpModel.fromJson(DocumentSnapshot snapshot) {
+    var snap = snapshot.data() as Map<String, dynamic>;
     return SignUpModel(
       username : snap["username"],
       email : snap["email"],
@@ -49,6 +53,7 @@ class SignUpModel{
       uid : snap["uid"],
       isAdmin : snap["isAdmin"],
       points : snap["points"],
+      totalPoints : snap["totalPoints"],
       lives : snap["lives"],
       answeredCorrectly : snap["answeredCorrectly"],
       totalDone : snap["totalDone"],

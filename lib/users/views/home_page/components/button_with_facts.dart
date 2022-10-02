@@ -1,20 +1,40 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_first_quiz_app/constants/constants.dart';
+import 'package:my_first_quiz_app/global_widgets/loading_screen.dart';
 import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
+import 'package:my_first_quiz_app/model/sign_up_model.dart';
+import 'package:my_first_quiz_app/users/view_model/user_details_view_model.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/categories_screen/categories_screen.dart';
 import 'package:my_first_quiz_app/users/views/home_page/inner_home_screens/history_of_questions_screen.dart';
+import 'package:my_first_quiz_app/utils/route_storage.dart';
+import 'package:provider/provider.dart';
 
 class PlayButton extends StatelessWidget {
   const PlayButton({
-    Key? key,
+    Key? key, this.sign,
   }) : super(key: key);
+  final SignUpModel? sign;
 
   @override
   Widget build(BuildContext context) {
+    final details = context.watch<UserDetailsViewModel>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: MaterialButton(
-        onPressed: () => Navigator.pushNamed(context, CategoriesScreen.routeName),
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            CategoriesScreen.routeName,
+          );
+          if(sign == null) {
+
+          }else {
+            details.getSignUpDetails(sign!);
+          }
+
+        },
         color: MyColor.darkBlue,
         // splashColor: const Color(0xFF0080a3),
         highlightColor: const Color(0xFF0080a3),
@@ -53,8 +73,10 @@ class TextFacts extends StatelessWidget {
 
 class CompletedButton extends StatelessWidget {
   const CompletedButton({
-    Key? key,
+    Key? key, required this.sign,
   }) : super(key: key);
+
+  final SignUpModel? sign;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +95,7 @@ class CompletedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: EText(
-          text: "Completed Levels: 2/5".toUpperCase(),
+          text: "Completed Levels: ${sign!.answeredCorrectly}/${sign!.totalDone}".toUpperCase(),
           size: 14, selectSize: true,
           weight: FontWeight.w900,
         ),

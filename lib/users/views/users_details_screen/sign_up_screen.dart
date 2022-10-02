@@ -7,6 +7,8 @@ import 'package:my_first_quiz_app/global_widgets/text_widget.dart';
 import 'package:my_first_quiz_app/global_widgets/text_field.dart';
 import 'package:my_first_quiz_app/users/view_model/user_details_view_model.dart';
 import 'package:my_first_quiz_app/users/views/home_page/admin_home_page.dart';
+import 'package:my_first_quiz_app/users/views/users_details_screen/login_screen.dart';
+import 'package:my_first_quiz_app/users/views/welcome_splash_screen.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -129,9 +131,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       controller: _passwordController, obscureText: _isObscure,
                                       suffixIcon: GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            _isObscure = !_isObscure;
-                                          });
+                                          if(mounted) {
+                                            setState(() {
+                                              _isObscure = !_isObscure;
+                                            });
+                                          }
                                         },
                                         child: _isObscure?
                                         const Icon(Icons.visibility_off, color: Colors.black,) :
@@ -151,9 +155,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       label: "Password", hintText: "Confirm password",
                                       suffixIcon: GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            _isObscure2 = !_isObscure2;
-                                          });
+                                          if(mounted) {
+                                            setState(() {
+                                              _isObscure2 = !_isObscure2;
+                                            });
+                                          }
                                         },
                                         child: _isObscure2?
                                         const Icon(Icons.visibility_off, color: Colors.black,) :
@@ -184,7 +190,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         email: _emailController.text, username: _userNameController.text,
                                         password: _passwordController.text, confirmPassword: _confirmPasswordController.text,
                                         context: context,
-                                        onSuccess: () => Navigator.pushNamedAndRemoveUntil(context, AdminHomePage.routeName, (route) => false),
+                                        onSuccess: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const WelcomeSplashScreen()), (route) => false),
                                       );
                                     }
                                   },

@@ -116,8 +116,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       controller: _passwordController, obscureText: _isObscure,
                                       suffixIcon: GestureDetector(
                                         onTap: () {
-                                          _isObscure = !_isObscure;
-                                          setState(() {});
+                                          if(mounted) {
+                                            setState(() {
+                                              _isObscure = !_isObscure;
+                                            });
+                                          }
                                         },
                                         child: _isObscure?
                                         const Icon(Icons.visibility_off, color: Colors.black,) :
